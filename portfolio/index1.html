@@ -1,0 +1,367 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <meta name="description" content="Tristan Shen — Portfolio" />
+    <title>Tristan Shen — Portfolio</title>
+    <link rel="stylesheet" href="./styles1.css" />
+  </head>
+
+  <body>
+    <header class="nav">
+      <div class="wrap nav__inner">
+        <div class="nav__brand">
+          <span class="logo">TS</span>
+          <span class="nav__name">
+            <span class="nameA">Tristan</span> <span class="nameB">Shen</span>
+          </span>
+        </div>
+
+        <nav class="nav__links">
+          <a class="resumeLink" href="./assets/Tristan_Shen_Resume.pdf" download>Resume</a>
+          <a href="#home">Home</a>
+          <a href="#quote">Profile</a>
+          <a href="#projects">Projects</a>
+          <a href="#contact">Contact</a>
+        </nav>
+      </div>
+    </header>
+
+    <!-- 1) LANDING -->
+    <section id="home" class="hero">
+      <canvas id="bgCanvas" class="hero__bg" aria-hidden="true"></canvas>
+
+      <div class="wrap hero__content">
+        <div class="hero__badge">Investment • PMO • Data</div>
+
+        <h1 class="hero__title">
+          <span class="nameA">Tristan</span> <span class="nameB">Shen</span>
+          <span class="hero__title2">Bank-style dashboards • structured execution • clear reporting</span>
+        </h1>
+
+        <div class="hero__cta">
+          <a class="btn btn--ghost" href="./assets/Tristan_Shen_Resume.pdf" download>Download Resume</a>
+          <a class="btn btn--solid" href="#projects">View projects</a>
+          <a class="btn btn--ghost" href="#contact">Contact</a>
+        </div>
+
+        <div class="hero__mini">
+          <div class="miniCard">
+            <div class="miniK">Portfolio</div>
+            <div class="miniV">$500K+</div>
+            <div class="miniN">~15%/yr (3+ years)</div>
+          </div>
+
+          <div class="miniCard">
+            <div class="miniK">Business ops</div>
+            <div class="miniV">+30% YoY</div>
+            <div class="miniN">~20% profit improvement</div>
+          </div>
+
+          <div class="miniCard">
+            <div class="miniK">Tools</div>
+            <div class="miniV">Excel • SQL</div>
+            <div class="miniN">Tableau • React/Flask</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 2) PROFILE (stock/quote-style) -->
+    <section id="quote" class="quote">
+      <div class="wrap">
+        <div class="sectionTop">
+          <div>
+            <div class="sectionK">PROFILE</div>
+            <h2 class="sectionH">Overview</h2>
+          </div>
+
+          <div class="sectionBtns">
+            <button class="btn btn--ghost btn--sm" id="toggleDetailsBtn" type="button">Toggle details</button>
+            <button class="btn btn--ghost btn--sm" id="simulateBtn" type="button">Simulate day</button>
+          </div>
+        </div>
+
+        <div class="quoteGrid">
+          <!-- Left: quote block -->
+          <div class="panel">
+            <div class="quoteHeader">
+              <div>
+                <div class="tickerLine">
+                  <span class="ticker">TRSN</span>
+                  <span class="tickerName">Tristan Shen</span>
+                  <span class="pill pill--soft">Candidate Profile</span>
+                </div>
+
+                <div class="priceRow">
+                  <div class="priceMain" id="impactScore">92.4</div>
+                  <div class="priceMeta">
+                    <div class="chg good" id="impactChg">+1.8 ( +1.99% )</div>
+                    <div class="muted2">Impact Score</div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="quoteActions">
+                <a class="btn btn--solid btn--sm" href="#projects">Projects</a>
+              </div>
+            </div>
+
+            <div class="sparkWrap">
+              <canvas id="spark" class="spark" aria-label="Impact chart"></canvas>
+              <div class="sparkLegend">
+                <div class="legItem"><span class="dot dotA"></span> Execution</div>
+                <div class="legItem"><span class="dot dotB"></span> Data</div>
+                <div class="legItem"><span class="dot dotC"></span> Finance</div>
+              </div>
+            </div>
+
+            <div class="fundGrid">
+              <div class="fund">
+                <div class="fundK">AUM Managed</div>
+                <div class="fundV">$500K+</div>
+              </div>
+              <div class="fund">
+                <div class="fundK">Return (avg)</div>
+                <div class="fundV">~15% / yr</div>
+              </div>
+              <div class="fund">
+                <div class="fundK">Ops Growth</div>
+                <div class="fundV">~30% YoY</div>
+              </div>
+              <div class="fund">
+                <div class="fundK">Core Tools</div>
+                <div class="fundV">Excel / SQL / Tableau</div>
+              </div>
+            </div>
+
+            <div class="newsBlock">
+              <div class="newsTop">
+                <div class="newsTitle">Summary</div>
+                <div class="muted2">Key points</div>
+              </div>
+
+              <div class="newsList">
+                <div class="newsItem">
+                  <div class="newsTime">Now</div>
+                  <div class="newsText">
+                    Math graduate with experience in <strong>project coordination</strong>, <strong>investment research</strong>,
+                    and <strong>business operations</strong>.
+                  </div>
+                </div>
+
+                <div class="newsItem">
+                  <div class="newsTime">+1</div>
+                  <div class="newsText">
+                    Strong with <strong>data work</strong> and <strong>clear communication</strong>; keeps updates concise for stakeholders.
+                  </div>
+                </div>
+
+                <div class="newsItem">
+                  <div class="newsTime">+2</div>
+                  <div class="newsText">
+                    Managed a <strong>$500K+ portfolio</strong> with <strong>~15%/year</strong> results over <strong>3+ years</strong>
+                    using multi-asset allocation.
+                  </div>
+                </div>
+
+                <div class="newsItem">
+                  <div class="newsTime">+3</div>
+                  <div class="newsText">
+                    Improved operations to drive <strong>~30% YoY growth</strong> and <strong>~20% profit improvement</strong>.
+                  </div>
+                </div>
+              </div>
+
+              <div id="detailBox" class="detailBox">
+                <div class="detailTitle">Details</div>
+                <ul class="bullets">
+                  <li>PMO: agendas, action items (owner + due date), follow-ups, milestone tracking.</li>
+                  <li>Investment: reports + trend analysis, strategy execution, risk management.</li>
+                  <li>Data: Excel/SQL/Tableau for clean reporting and decision support.</li>
+                  <li>Tech: React + Flask dashboards with internal-tool UX patterns.</li>
+                </ul>
+              </div>
+            </div>
+
+            <div class="tickerTape" aria-hidden="true">
+              <div class="tape" id="tape">
+                <span>Execution • Action Items • Ownership • Follow-ups</span>
+                <span>Portfolio • Allocation • Risk • Process</span>
+                <span>Excel • SQL • Tableau • Dashboards</span>
+                <span>Stakeholders • Clarity • Documentation</span>
+                <span>React • Flask • Internal Tools</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Right: SKILLS panel (replaces Snapshot) -->
+          <div class="panel panel--side">
+            <div class="sideTitle">Skills</div>
+
+            <div class="skillCard">
+              <div class="sideK">Execution</div>
+              <div class="sideV">PMO workflow, action tracking, stakeholder updates</div>
+            </div>
+
+            <div class="skillCard">
+              <div class="sideK">Investment</div>
+              <div class="sideV">Research, allocation, risk thinking, memo-style reporting</div>
+            </div>
+
+            <div class="skillCard">
+              <div class="sideK">Data</div>
+              <div class="sideV">Excel, SQL, Tableau; structured dashboards</div>
+            </div>
+
+            <div class="skillCard">
+              <div class="sideK">Build</div>
+              <div class="sideV">React + Flask; clean UI for internal tools</div>
+            </div>
+
+            <div class="sideDivider"></div>
+
+            <a class="btn btn--solid w100" href="#projects">View projects</a>
+            <a class="btn btn--ghost w100" href="#contact">Contact</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 3) PROJECTS: tab switch + iframe -->
+    <section id="projects" class="projects">
+      <div class="wrap">
+        <div class="sectionTop">
+          <div>
+            <div class="sectionK">PROJECTS</div>
+            <h2 class="sectionH">Work Samples</h2>
+          </div>
+        </div>
+
+        <div class="projTabs">
+          <button class="tab is-active" data-src="./projects/risk-dashboard/index.html" type="button">
+            Portfolio Risk Dashboard
+          </button>
+          <button class="tab" data-src="./projects/pmo-tracker/index.html" type="button">
+            PMO Execution Tracker
+          </button>
+
+          <div class="projRight">
+            <a
+              class="btn btn--ghost btn--sm"
+              id="openNewBtn"
+              href="./projects/risk-dashboard/index.html"
+              target="_blank"
+              rel="noreferrer"
+            >Open</a>
+          </div>
+        </div>
+
+        <div class="projFrameWrap">
+          <iframe
+            id="projFrame"
+            title="Project Preview"
+            src="./projects/risk-dashboard/index.html"
+            loading="lazy"
+          ></iframe>
+        </div>
+      </div>
+    </section>
+
+    <!-- 4) CONTACT -->
+    <section id="contact" class="contact">
+      <div class="wrap">
+        <div class="sectionTop">
+          <div>
+            <div class="sectionK">CONTACT</div>
+            <h2 class="sectionH">Get in touch</h2>
+          </div>
+        </div>
+
+        <div class="contactGrid">
+          <div class="panel contactCard">
+            <div class="contactTitle">Contact info</div>
+
+            <div class="contactRow">
+              <div class="sideK">Email</div>
+              <div class="contactVal">
+                <a class="link" id="emailLink" href="mailto:your@email.com">your@email.com</a>
+                <button class="btn btn--ghost btn--sm" id="copyEmailBtn" type="button">Copy</button>
+              </div>
+            </div>
+
+            <div class="contactRow">
+              <div class="sideK">LinkedIn</div>
+              <div class="contactVal">
+                <a class="link" href="#" target="_blank" rel="noreferrer">linkedin.com/in/your-handle</a>
+              </div>
+            </div>
+
+            <div class="contactRow">
+                <div class="sideK">Resume</div>
+                <div class="contactVal">
+                    <a class="link" href="./assets/Tristan_Shen_Resume.pdf" download>Download PDF</a>
+                </div>
+            </div>
+
+
+            <div class="contactRow">
+              <div class="sideK">Location</div>
+              <div class="contactVal muted">Toronto, ON</div>
+            </div>
+
+            <div class="sideDivider"></div>
+
+            <div class="muted">
+              Replace the placeholders in <strong>index.html</strong>:
+              <ul class="bullets">
+                <li><span class="muted2">your@email.com</span></li>
+                <li><span class="muted2">linkedin.com/in/your-handle</span></li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="panel contactCard">
+            <div class="contactTitle">Message</div>
+
+            <form id="contactForm" class="contactForm">
+              <div class="row">
+                <label for="c_name">Name</label>
+                <input id="c_name" type="text" placeholder="Your name" required />
+              </div>
+
+              <div class="row">
+                <label for="c_email">Email</label>
+                <input id="c_email" type="email" placeholder="your@email.com" required />
+              </div>
+
+              <div class="row">
+                <label for="c_msg">Message</label>
+                <textarea id="c_msg" rows="6" placeholder="Write your message..." required></textarea>
+              </div>
+
+              <div class="contactActions">
+                <button class="btn btn--solid" type="submit">Open email draft</button>
+                <button class="btn btn--ghost" type="reset">Clear</button>
+              </div>
+
+              <div class="muted2">
+                This opens your email client (static site friendly).
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <footer class="footer">
+      <div class="wrap footer__inner">
+        <div class="muted2">© <span id="year"></span> Tristan Shen</div>
+        <div class="muted2">Static HTML/CSS/JS</div>
+      </div>
+    </footer>
+
+    <script src="./script1.js"></script>
+  </body>
+</html>

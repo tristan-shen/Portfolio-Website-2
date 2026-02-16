@@ -1,0 +1,182 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <meta name="description" content="Client Portfolio Risk Dashboard (Demo) — allocation, concentration, rebalance suggestions" />
+    <title>Portfolio Risk Dashboard — Demo</title>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+
+  <body>
+    <header class="topbar">
+      <div class="container topbar__inner">
+        <div class="brand">
+          <div class="brand__mark">PR</div>
+          <div class="brand__text">
+            <div class="brand__name">Portfolio Risk Dashboard</div>
+            <div class="brand__sub">Demo • static HTML/CSS/JS • sample data included</div>
+          </div>
+        </div>
+
+        <div class="actions">
+          <button class="btn btn--ghost" id="loadSampleBtn" type="button">Load sample</button>
+          <button class="btn btn--ghost" id="randomBtn" type="button">Generate random</button>
+
+          <label class="btn btn--solid fileBtn">
+            Upload CSV
+            <input id="csvInput" type="file" accept=".csv,text/csv" />
+          </label>
+        </div>
+      </div>
+    </header>
+
+    <main class="container">
+      <!-- Summary row -->
+      <section class="grid grid--3">
+        <div class="card">
+          <div class="card__k">Total Portfolio Value</div>
+          <div class="card__v" id="totalValue">$0</div>
+          <div class="card__note" id="asOf">As of —</div>
+        </div>
+
+        <div class="card">
+          <div class="card__k">Risk Snapshot</div>
+          <div class="riskBadges" id="riskBadges"></div>
+          <div class="card__note">Flags are rule-based (demo). Adjust thresholds for your style.</div>
+        </div>
+
+        <div class="card">
+          <div class="card__k">Target Allocation</div>
+          <div class="targets" id="targets"></div>
+          <div class="card__note">Used to generate rebalance suggestions.</div>
+        </div>
+      </section>
+
+      <!-- Allocation + stats -->
+      <section class="grid grid--2 mt">
+        <div class="card card--pad">
+          <div class="cardTop">
+            <div>
+              <div class="cardTop__title">Allocation</div>
+              <div class="cardTop__sub">Equity / Bond / Cash / Alt</div>
+            </div>
+            <div class="pill">Demo</div>
+          </div>
+
+          <div class="allocWrap">
+            <canvas id="donut" class="donut" aria-label="Allocation donut chart"></canvas>
+            <div class="legend" id="allocLegend"></div>
+          </div>
+        </div>
+
+        <div class="card card--pad">
+          <div class="cardTop">
+            <div>
+              <div class="cardTop__title">Key Metrics</div>
+              <div class="cardTop__sub">Concentration, diversification, and exposure</div>
+            </div>
+            <div class="pill">Rules</div>
+          </div>
+
+          <div class="metrics" id="metrics"></div>
+
+          <details class="details">
+            <summary>How metrics are calculated</summary>
+            <div class="details__body">
+              <ul class="bullets">
+                <li><strong>Top holding %:</strong> largest holding value ÷ total portfolio.</li>
+                <li><strong>Sector concentration:</strong> largest sector value ÷ total.</li>
+                <li><strong>Equity overweight:</strong> equity % − target equity %.</li>
+                <li><strong>Vol proxy:</strong> weighted-average risk score (demo, not real volatility).</li>
+              </ul>
+            </div>
+          </details>
+        </div>
+      </section>
+
+      <!-- Rebalance suggestions -->
+      <section class="card card--pad mt">
+        <div class="cardTop">
+          <div>
+            <div class="cardTop__title">Rebalance Suggestions</div>
+            <div class="cardTop__sub">Dollar amounts to move toward target allocation</div>
+          </div>
+          <button class="btn btn--ghost btn--sm" id="resetTargetsBtn" type="button">Reset targets</button>
+        </div>
+
+        <div class="rebalanceGrid">
+          <div class="rebalancePanel">
+            <div class="subhead">Suggested Trades (by asset class)</div>
+            <div id="rebalanceTrades" class="tradeList"></div>
+            <div class="note">
+              This is a planning tool. In real life, consider taxes, spreads, liquidity, restrictions, and client suitability.
+            </div>
+          </div>
+
+          <div class="rebalancePanel">
+            <div class="subhead">Adjust Targets</div>
+            <div class="targetForm" id="targetForm"></div>
+            <div class="note">
+              Tip: banks love seeing “rules + documentation.” Targets make the logic explicit.
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Holdings table -->
+      <section class="card card--pad mt">
+        <div class="cardTop">
+          <div>
+            <div class="cardTop__title">Holdings</div>
+            <div class="cardTop__sub">Clean, audit-friendly view</div>
+          </div>
+          <div class="tableActions">
+            <button class="btn btn--ghost btn--sm" id="sortValueBtn" type="button">Sort by value</button>
+            <button class="btn btn--ghost btn--sm" id="sortRiskBtn" type="button">Sort by risk</button>
+          </div>
+        </div>
+
+        <div class="tableWrap">
+          <table class="table" id="holdingsTable">
+            <thead>
+              <tr>
+                <th>Ticker</th>
+                <th>Name</th>
+                <th>Asset Class</th>
+                <th>Sector</th>
+                <th class="num">Shares</th>
+                <th class="num">Price</th>
+                <th class="num">Value</th>
+                <th class="num">Weight</th>
+                <th class="num">Risk</th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </div>
+
+        <details class="details">
+          <summary>CSV format (if you upload)</summary>
+          <div class="details__body">
+            <p class="muted">
+              Use a header row. Required columns:
+              <code>ticker,name,assetClass,sector,shares,price,riskScore</code>
+            </p>
+            <p class="muted">
+              Example row:
+              <code>TSLA,Tesla,Equity,Consumer Discretionary,12,215.30,7</code>
+            </p>
+          </div>
+        </details>
+      </section>
+
+      <footer class="footer">
+        <div class="muted">© <span id="year"></span> • Portfolio Risk Dashboard (Demo)</div>
+        <div class="muted">Built with static HTML/CSS/JS • No external libraries</div>
+      </footer>
+    </main>
+
+    <script src="./script.js"></script>
+  </body>
+</html>

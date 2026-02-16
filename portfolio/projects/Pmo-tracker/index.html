@@ -1,0 +1,178 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <meta name="description" content="PMO Execution Tracker — actions, milestones, risks, weekly update" />
+    <title>PMO Execution Tracker — Demo</title>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+
+  <body>
+    <header class="top">
+      <div class="wrap top__inner">
+        <div class="brand">
+          <div class="brand__mark">PMO</div>
+          <div class="brand__text">
+            <div class="brand__title">Execution Tracker</div>
+            <div class="brand__sub">Actions • Milestones • Risks • Weekly Update</div>
+          </div>
+        </div>
+
+        <div class="top__actions">
+          <button class="btn btn--ghost" id="loadSampleBtn" type="button">Load sample</button>
+          <button class="btn btn--ghost" id="randomBtn" type="button">Generate random</button>
+          <button class="btn btn--ghost" id="resetBtn" type="button">Reset</button>
+          <button class="btn btn--solid" id="copyWeeklyBtn" type="button">Copy weekly update</button>
+        </div>
+      </div>
+    </header>
+
+    <main class="wrap">
+      <!-- Snapshot -->
+      <section class="grid grid--4 mt">
+        <div class="card">
+          <div class="k">Open actions</div>
+          <div class="v" id="openCount">0</div>
+          <div class="note" id="openNote">—</div>
+        </div>
+        <div class="card">
+          <div class="k">Due in 7 days</div>
+          <div class="v" id="due7">0</div>
+          <div class="note">Helps prioritize follow-ups</div>
+        </div>
+        <div class="card">
+          <div class="k">Overdue</div>
+          <div class="v bad" id="overdue">0</div>
+          <div class="note">Immediate escalation candidates</div>
+        </div>
+        <div class="card">
+          <div class="k">Overall status</div>
+          <div class="statusPill" id="overallPill">—</div>
+          <div class="note">Rule-based (demo)</div>
+        </div>
+      </section>
+
+      <!-- Actions -->
+      <section class="panel mt">
+        <div class="panel__top">
+          <div>
+            <div class="panel__title">Action Items</div>
+            <div class="panel__sub">Owner + due date + status (audit-friendly)</div>
+          </div>
+
+          <div class="filters">
+            <select id="fStatus" class="select">
+              <option value="all">Status: All</option>
+              <option value="Open">Open</option>
+              <option value="In Progress">In Progress</option>
+              <option value="Blocked">Blocked</option>
+              <option value="Done">Done</option>
+            </select>
+
+            <select id="fOwner" class="select">
+              <option value="all">Owner: All</option>
+            </select>
+
+            <select id="fPriority" class="select">
+              <option value="all">Priority: All</option>
+              <option value="P0">P0</option>
+              <option value="P1">P1</option>
+              <option value="P2">P2</option>
+            </select>
+
+            <button class="btn btn--ghost btn--sm" id="addActionBtn" type="button">+ Add action</button>
+          </div>
+        </div>
+
+        <div class="tableWrap">
+          <table class="table" id="actionsTable">
+            <thead>
+              <tr>
+                <th>Action</th>
+                <th>Owner</th>
+                <th>Priority</th>
+                <th>Status</th>
+                <th class="num">Due</th>
+                <th class="num">Days</th>
+                <th class="num">Follow-up</th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </div>
+
+        <details class="details">
+          <summary>What this shows recruiters</summary>
+          <div class="details__body">
+            You can run meetings into measurable outcomes: ownership, due dates, follow-up cadence, and closure.
+          </div>
+        </details>
+      </section>
+
+      <!-- Milestones + Risks -->
+      <section class="grid grid--2 mt">
+        <section class="panel">
+          <div class="panel__top">
+            <div>
+              <div class="panel__title">Milestones</div>
+              <div class="panel__sub">Simple timeline with progress</div>
+            </div>
+            <button class="btn btn--ghost btn--sm" id="addMilestoneBtn" type="button">+ Add milestone</button>
+          </div>
+
+          <div class="milestones" id="milestones"></div>
+        </section>
+
+        <section class="panel">
+          <div class="panel__top">
+            <div>
+              <div class="panel__title">Risks / Issues</div>
+              <div class="panel__sub">RAG + mitigation (executive readable)</div>
+            </div>
+            <button class="btn btn--ghost btn--sm" id="addRiskBtn" type="button">+ Add risk</button>
+          </div>
+
+          <div class="risks" id="risks"></div>
+        </section>
+      </section>
+
+      <!-- Weekly Update (generated) -->
+      <section class="panel mt mb">
+        <div class="panel__top">
+          <div>
+            <div class="panel__title">Weekly Update (Auto-Generated)</div>
+            <div class="panel__sub">Copy/paste into email or Teams</div>
+          </div>
+          <button class="btn btn--ghost btn--sm" id="regenWeeklyBtn" type="button">Refresh</button>
+        </div>
+
+        <textarea class="weekly" id="weeklyText" rows="10" spellcheck="false"></textarea>
+        <div class="foot">
+          Saved locally in your browser (localStorage). No backend.
+        </div>
+      </section>
+    </main>
+
+    <!-- Modal -->
+    <div class="modal" id="modal" aria-hidden="true">
+      <div class="modal__card" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+        <div class="modal__top">
+          <div class="modal__title" id="modalTitle">Add</div>
+          <button class="iconBtn" id="closeModalBtn" type="button" aria-label="Close">✕</button>
+        </div>
+
+        <form class="form" id="modalForm">
+          <div id="formBody"></div>
+
+          <div class="modal__actions">
+            <button class="btn btn--ghost" id="cancelBtn" type="button">Cancel</button>
+            <button class="btn btn--solid" type="submit">Save</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <script src="./script.js"></script>
+  </body>
+</html>
