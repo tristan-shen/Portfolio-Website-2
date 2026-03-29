@@ -71,7 +71,21 @@
             <span class="chip">Stakeholder updates</span>
             <span class="chip">Process + documentation</span>
             <span class="chip">React + Flask</span>
+            <a class="chip chip--link" href="#projects" data-project-jump="chatbot">Ask Tristan AI</a>
           </div>
+
+          <form class="heroAsk" id="heroAskForm">
+            <label class="srOnly" for="heroAskInput">Ask Tristan AI</label>
+            <input
+              class="heroAsk__input"
+              id="heroAskInput"
+              type="text"
+              placeholder="Ask me about PMO, investing, dashboards..."
+              maxlength="500"
+              autocomplete="off"
+            />
+            <button class="btn btn--solid heroAsk__btn" type="submit">Ask me</button>
+          </form>
         </div>
 
         <div class="scrollHint" aria-hidden="true">
@@ -254,19 +268,23 @@
               </p>
             </div>
           </div>
-
+            
           <div class="projTabs">
-            <button class="tab is-active" data-src="./risk-dashboard/index.html" type="button">
+            <button class="tab is-active" data-project="chatbot" type="button">
+              Ask Tristan AI
+            </button>
+
+            <button class="tab" data-project="risk" data-src="./risk-dashboard/index.html" type="button">
               Portfolio Risk Dashboard
             </button>
 
-            <button class="tab" data-src="./pmo-tracker/index.html" type="button">
+            <button class="tab" data-project="pmo" data-src="./pmo-tracker/index.html" type="button">
               PMO Execution Tracker
             </button>
 
             <div class="projRight">
               <a
-                class="btn btn--ghost btn--sm"
+                class="btn btn--ghost btn--sm is-hidden"
                 id="openNewBtn"
                 href="./risk-dashboard/index.html"
                 target="_blank"
@@ -275,13 +293,49 @@
             </div>
           </div>
 
-          <div class="projFrameWrap">
-            <iframe
-              id="projFrame"
-              title="Project Preview"
-              src="./risk-dashboard/index.html"
-              loading="lazy"
-            ></iframe>
+          <div class="projectPanels">
+            <div class="card webbotCard" id="chatbotProjectPanel">
+              <div class="webbotTop">
+                <div>
+                  <div class="webbotEyebrow">Live Demo</div>
+                  <h3 class="webbotTitle">Ask Tristan AI</h3>
+                  <p class="webbotDesc">
+                    Ask about Tristan’s background, projects, skills, and target roles.
+                  </p>
+                </div>
+
+                <div class="webbotStatusWrap">
+                  <span class="webbotStatus" id="webbotStatus">Chatbot is online</span>
+                </div>
+              </div>
+
+              <div class="webbotMessages" id="webbotMessages">
+                <div class="webbotMsg webbotMsg--bot">
+                  Hi — I can answer questions about Tristan’s background, project work, and target roles.
+                </div>
+              </div>
+
+              <form class="webbotForm" id="webbotForm">
+                <input
+                  class="webbotInput"
+                  id="webbotInput"
+                  type="text"
+                  placeholder="Ask about Tristan’s PMO work, portfolio, skills..."
+                  maxlength="500"
+                  autocomplete="off"
+                />
+                <button class="btn btn--solid" type="submit" id="webbotSendBtn">Send</button>
+              </form>
+            </div>
+
+            <div class="projFrameWrap is-hidden" id="projFrameWrap">
+              <iframe
+                id="projFrame"
+                title="Project Preview"
+                src="./risk-dashboard/index.html"
+                loading="lazy"
+              ></iframe>
+            </div>
           </div>
         </div>
       </section>

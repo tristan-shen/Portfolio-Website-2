@@ -255,27 +255,47 @@ function bindDetailsToggle() {
    ========================= */
 function bindProjectTabs() {
   const frame = $("projFrame");
+  const frameWrap = $("projFrameWrap");
+  const chatbotPanel = $("chatbotProjectPanel");
   const openBtn = $("openNewBtn");
-  const tabs = Array.from(document.querySelectorAll(".tab"));
+  const tabs = Array.from(document.querySelectorAll(".projTabs .tab"));
 
-  if (!frame || !tabs.length) return;
+  if (!tabs.length) return null;
 
-  function setActive(tab) {
+  function setActiveProject(projectKey) {
+    const tab = tabs.find((t) => t.dataset.project === projectKey) || tabs[0];
+    if (!tab) return;
+
     tabs.forEach((t) => t.classList.remove("is-active"));
     tab.classList.add("is-active");
 
+    const isChatbot = tab.dataset.project === "chatbot";
+
+    if (chatbotPanel) chatbotPanel.classList.toggle("is-hidden", !isChatbot);
+    if (frameWrap) frameWrap.classList.toggle("is-hidden", isChatbot);
+
+    if (isChatbot) {
+      openBtn?.classList.add("is-hidden");
+      return;
+    }
+
     const src = tab.dataset.src;
-    if (src) {
+    if (src && frame) {
       frame.src = src;
-      if (openBtn) openBtn.href = src;
+      if (openBtn) {
+        openBtn.href = src;
+        openBtn.classList.remove("is-hidden");
+      }
     }
   }
 
   tabs.forEach((tab) => {
     tab.addEventListener("click", () => {
-      setActive(tab);
+      setActiveProject(tab.dataset.project || "chatbot");
     });
   });
+
+  return { setActiveProject };
 }
 
 /* =========================
@@ -407,7 +427,142 @@ function bindContact() {
 }
 
 /* =========================
-   8) Boot
+   8) Chatbot
+   ========================= */
+function initWebbot() {
+  const form = document.getElementById("webbotForm");
+  const input = document.getElementById("webbotInput");
+  const messages = document.getElementById("webbotMessages");
+  const status = document.getElementById("webbotStatus");
+  const sendBtn = document.getElementById("webbotSendBtn");
+
+  if (!form || !input || !messages || !status || !sendBtn) return null;
+
+  const API_URL = "https://princeton-semideterministic-catarrhally.ngrok-free.dev/api/chat";
+  // replace this with your real backend URL
+
+  const addMessage = (text, type = "bot") => {
+    const div = document.createElement("div");
+    div.className = `webbotMsg webbotMsg--${type}`;
+    div.textContent = text;
+    messages.appendChild(div);
+    messages.scrollTop = messages.scrollHeight;
+    return div;
+  };
+
+  const setThinking = (isThinking) => {
+    if (isThinking) {
+      status.textContent = "Chatbot is thinking...";
+      sendBtn.disabled = true;
+      input.disabled = true;
+    } else {
+      status.textContent = "Chatbot is online";
+      sendBtn.disabled = false;
+      input.disabled = false;
+      input.focus();
+    }
+  };
+
+  const submitMessage = async (message) => {
+    const cleanMessage = (message || "").trim();
+    if (!cleanMessage) return;
+
+    addMessage(cleanMessage, "user");
+    input.value = "";
+
+    setThinking(true);
+    const thinkingBubble = addMessage("Chatbot is thinking...", "thinking");
+
+    try {
+      const res = await fetch(API_URL, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ message: cleanMessage })
+      });
+
+      const data = await res.json();
+
+      thinkingBubble.remove();
+
+      if (!res.ok) {
+        addMessage(data.error || "Sorry, something went wrong.", "bot");
+      } else {
+        addMessage(
+          data.answer || "Sorry, I do not have a response right now.",
+          "bot"
+        );
+      }
+    } catch (err) {
+      thinkingBubble.remove();
+      addMessage("Sorry, the chatbot is unavailable right now.", "bot");
+    } finally {
+      setThinking(false);
+    }
+  };
+
+  form.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    await submitMessage(input.value);
+  });
+
+  return {
+    focus() {
+      input.focus();
+    },
+    async ask(message) {
+      input.value = message;
+      await submitMessage(message);
+    }
+  };
+}
+
+/* =========================
+   9) Hero ask bar + jump tags
+   ========================= */
+function bindHeroAsk(projectApi, webbotApi) {
+  const heroForm = $("heroAskForm");
+  const heroInput = $("heroAskInput");
+  const jumpLinks = Array.from(document.querySelectorAll("[data-project-jump]"));
+
+  const jumpToChatbot = () => {
+    projectApi?.setActiveProject("chatbot");
+    document
+      .getElementById("projects")
+      ?.scrollIntoView({ behavior: "smooth", block: "start" });
+  };
+
+  jumpLinks.forEach((link) => {
+    link.addEventListener("click", () => {
+      setTimeout(() => {
+        jumpToChatbot();
+        setTimeout(() => webbotApi?.focus(), 350);
+      }, 0);
+    });
+  });
+
+  if (!heroForm || !heroInput) return;
+
+  heroForm.addEventListener("submit", async (e) => {
+    e.preventDefault();
+
+    const message = heroInput.value.trim();
+    if (!message) return;
+
+    jumpToChatbot();
+    heroInput.value = "";
+
+    setTimeout(async () => {
+      if (webbotApi?.ask) {
+        await webbotApi.ask(message);
+      }
+    }, 450);
+  });
+}
+
+/* =========================
+   10) Boot
    ========================= */
 function boot() {
   setYear();
@@ -415,9 +570,15 @@ function boot() {
   setupBackground();
   quoteSpark();
   bindDetailsToggle();
-  bindProjectTabs();
+
+  const projectApi = bindProjectTabs();
+  const webbotApi = initWebbot();
+
   bindTheme();
   bindContact();
+  bindHeroAsk(projectApi, webbotApi);
+
+  projectApi?.setActiveProject("chatbot");
 }
 
 document.addEventListener("DOMContentLoaded", boot);
