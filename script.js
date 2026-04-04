@@ -435,11 +435,26 @@ function initWebbot() {
   const messages = document.getElementById("webbotMessages");
   const status = document.getElementById("webbotStatus");
   const sendBtn = document.getElementById("webbotSendBtn");
+  const newChatBtn = document.getElementById("webbotNewChatBtn");
+  const heroAskForm = document.getElementById("heroAskForm");
+  const heroAskInput = document.getElementById("heroAskInput");
 
   if (!form || !input || !messages || !status || !sendBtn) return null;
 
   const API_URL = "https://princeton-semideterministic-catarrhally.ngrok-free.dev/api/chat";
-  // replace this with your real backend URL
+  const SESSION_KEY = "tristan_webbot_session_id";
+
+  const getSessionId = () => sessionStorage.getItem(SESSION_KEY) || "";
+
+  const setSessionId = (sessionId) => {
+    if (sessionId) {
+      sessionStorage.setItem(SESSION_KEY, sessionId);
+    }
+  };
+
+  const clearSessionId = () => {
+    sessionStorage.removeItem(SESSION_KEY);
+  };
 
   const addMessage = (text, type = "bot") => {
     const div = document.createElement("div");
@@ -450,15 +465,28 @@ function initWebbot() {
     return div;
   };
 
+  const resetChatUi = () => {
+    messages.innerHTML = "";
+    addMessage(
+      "Hi — I can help with Tristan’s background, projects, skills, public links, and contact or meeting requests.",
+      "bot"
+    );
+    status.textContent = "Chatbot is online";
+    input.value = "";
+    input.focus();
+  };
+
   const setThinking = (isThinking) => {
     if (isThinking) {
       status.textContent = "Chatbot is thinking...";
       sendBtn.disabled = true;
       input.disabled = true;
+      if (newChatBtn) newChatBtn.disabled = true;
     } else {
       status.textContent = "Chatbot is online";
       sendBtn.disabled = false;
       input.disabled = false;
+      if (newChatBtn) newChatBtn.disabled = false;
       input.focus();
     }
   };
@@ -474,21 +502,29 @@ function initWebbot() {
     const thinkingBubble = addMessage("Chatbot is thinking...", "thinking");
 
     try {
+      const payload = {
+        message: cleanMessage,
+        session_id: getSessionId()
+      };
+
       const res = await fetch(API_URL, {
         method: "POST",
         headers: {
           "Content-Type": "application/json"
         },
-        body: JSON.stringify({ message: cleanMessage })
+        body: JSON.stringify(payload)
       });
 
       const data = await res.json();
-
       thinkingBubble.remove();
 
       if (!res.ok) {
         addMessage(data.error || "Sorry, something went wrong.", "bot");
       } else {
+        if (data.session_id) {
+          setSessionId(data.session_id);
+        }
+
         addMessage(
           data.answer || "Sorry, I do not have a response right now.",
           "bot"
@@ -502,19 +538,41 @@ function initWebbot() {
     }
   };
 
-  form.addEventListener("submit", async (e) => {
+  form.addEventListener("submit", (e) => {
     e.preventDefault();
-    await submitMessage(input.value);
+    submitMessage(input.value);
   });
 
+  if (newChatBtn) {
+    newChatBtn.addEventListener("click", () => {
+      clearSessionId();
+      resetChatUi();
+    });
+  }
+
+  if (heroAskForm && heroAskInput) {
+    heroAskForm.addEventListener("submit", (e) => {
+      e.preventDefault();
+      const msg = heroAskInput.value.trim();
+      if (!msg) return;
+
+      window.location.hash = "#projects";
+
+      const chatbotTab = document.querySelector('[data-project="chatbot"]');
+      if (chatbotTab) chatbotTab.click();
+
+      input.value = msg;
+      heroAskInput.value = "";
+
+      setTimeout(() => {
+        form.requestSubmit();
+      }, 120);
+    });
+  }
+
   return {
-    focus() {
-      input.focus();
-    },
-    async ask(message) {
-      input.value = message;
-      await submitMessage(message);
-    }
+    submitMessage,
+    resetChatUi
   };
 }
 
