@@ -639,4 +639,23 @@ function boot() {
   projectApi?.setActiveProject("chatbot");
 }
 
+let isSending = false;
+
+async function sendMessage() {
+  if (isSending) return;
+
+  const text = input.value.trim();
+  if (!text) return;
+
+  isSending = true;
+  sendBtn.disabled = true;
+
+  try {
+    // send fetch here
+  } finally {
+    isSending = false;
+    sendBtn.disabled = false;
+  }
+}
+
 document.addEventListener("DOMContentLoaded", boot);
