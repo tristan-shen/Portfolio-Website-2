@@ -317,6 +317,30 @@ function bindTheme() {
   });
 }
 
+const SESSION_ID_KEY = "tristan_chat_session_id";
+const CHAT_HISTORY_KEY = "tristan_chat_history";
+
+function getOrCreateSessionId() {
+  let sessionId = sessionStorage.getItem(SESSION_ID_KEY);
+  if (!sessionId) {
+    sessionId = crypto.randomUUID();
+    sessionStorage.setItem(SESSION_ID_KEY, sessionId);
+  }
+  return sessionId;
+}
+
+function loadChatHistory() {
+  try {
+    return JSON.parse(sessionStorage.getItem(CHAT_HISTORY_KEY) || "[]");
+  } catch {
+    return [];
+  }
+}
+
+function saveChatHistory(messages) {
+  sessionStorage.setItem(CHAT_HISTORY_KEY, JSON.stringify(messages));
+}
+
 function injectLightTheme() {
   const style = document.createElement("style");
   style.textContent = `
