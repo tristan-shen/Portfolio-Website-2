@@ -643,6 +643,11 @@ function bindHeroAsk(projectApi, webbotApi) {
   });
 }
 
+<script
+  src="https://princeton-semideterministic-catarrhally.ngrok-free.dev/api"
+  data-api-base="https://princeton-semideterministic-catarrhally.ngrok-free.dev/api"
+></script>
+
 /* =========================
    10) Boot
    ========================= */
